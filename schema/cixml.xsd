@@ -1,0 +1,123 @@
+<xs:schema targetNamespace="http://www.cisco.com/ExternalCallControl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cisco.com/ExternalCallControl" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="cixml">
+        <xs:annotation>
+            <xs:documentation>cixml</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="continue">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="greeting" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="identification" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string"/>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="modify" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="callingNumber" type="phoneNumber" use="optional"/>
+                                    <xs:attribute name="calledNumber" type="phoneNumber" use="optional"/>
+                                    <xs:attribute name="callingName" type="xs:string" use="optional"/>
+                                    <xs:attribute name="calledName" type="xs:string" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="divert">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="destination" type="destinationNumber"/>
+                            <xs:element name="reason" type="reasonCode" minOccurs="0"/>
+                            <xs:element name="modify" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="callingNumber" type="phoneNumber" use="optional"/>
+                                    <xs:attribute name="calledNumber" type="phoneNumber" use="optional"/>
+                                    <xs:attribute name="callingName" type="xs:string" use="optional"/>
+                                    <xs:attribute name="calledName" type="xs:string" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="resetCallHistory" type="resetMode" minOccurs="0"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="reject">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="announce" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="identification" type="xs:string" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="reason" type="xs:string" minOccurs="0"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:any namespace="##other" processContents="lax" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Other mechanisms for describing routing rule</xs:documentation>
+                    </xs:annotation>
+                </xs:any>
+            </xs:choice>
+            <xs:attribute name="version" type="xs:integer"/>
+            <xs:attribute name="id" type="xs:token"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="phoneNumber">
+        <xs:annotation>
+            <xs:documentation>phone number digits ( +, 0-9A-D,*,#)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[+]?[0-9A-D*#]{1,48}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="reasonCode">
+        <xs:annotation>
+            <xs:documentation>reasonCode</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="unknown"/>
+            <xs:enumeration value="user-busy"/>
+            <xs:enumeration value="no-answer"/>
+            <xs:enumeration value="unavailable"/>
+            <xs:enumeration value="unconditional"/>
+            <xs:enumeration value="time-of-day"/>
+            <xs:enumeration value="time-of-day"/>
+            <xs:enumeration value="do-not-disturb"/>
+            <xs:enumeration value="deflection"/>
+            <xs:enumeration value="follow-me"/>
+            <xs:enumeration value="out-of-service"/>
+            <xs:enumeration value="away"/>
+            <xs:enumeration value="blocked"/>
+            <xs:enumeration value="chaprone"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="resetMode">
+        <xs:annotation>
+            <xs:documentation>resetMode</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="resetLastHop"/>
+            <xs:enumeration value="resetAllHops"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="destinationNumber">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="phoneNumber">
+                    <xs:minInclusive value="1"/>
+                    <xs:maxExclusive value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="voiceMail"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+</xs:schema>

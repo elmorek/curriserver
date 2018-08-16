@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.cisco.com/ExternalCallControl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cisco.com/ExternalCallControl" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Subject"/>
+                <xs:element ref="Resource"/>
+                <xs:element ref="Action"/>
+                <xs:element ref="Environment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Action">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Attribute"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Attribute">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="AttributeValue"/>
+            </xs:sequence>
+            <xs:attribute name="Issuer" type="xs:NMTOKEN" use="optional"/>
+            <xs:attribute name="DataType" type="xs:string" use="required"/>
+            <xs:attribute name="AttributeId" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AttributeValue">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+    <xs:element name="Environment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Attribute"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Resource">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Attribute"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Subject">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Attribute" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="AttributeAssignment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="AttributeValue"/>
+            </xs:sequence>
+        <xs:attribute name="AttributeId" type="xs:NMTOKEN" use="required">
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AttributeValue">
+        <xs:complexType mixed="true">
+            <xs:attribute name="DataType" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Decision">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+    <xs:element name="Obligation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="AttributeAssignment" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="FulfillOn" type="xs:NMTOKEN" use="required"/>
+            <xs:attribute name="ObligationId" type="xs:NMTOKEN" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Obligations">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Obligation" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Result"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Result">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Decision"/>
+                <xs:element ref="Status"/>
+                <xs:element ref="Obligations"/>
+            </xs:sequence>
+            <xs:attribute name="ResourceId" type="xs:NMTOKEN" use="required"/>
+        </xs:complexType>
+     </xs:element>
+     <xs:element name="Status">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="StatusCode"/>
+                <xs:element ref="StatusMessage"/>
+                <xs:element ref="StatusDetail"/>
+            </xs:sequence>
+        </xs:complexType>
+       </xs:element>
+         <xs:element name="StatusCode">
+            <xs:complexType>
+                <xs:attribute name="Value" type="xs:NMTOKEN" use="required"/>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="StatusDetail">
+            <xs:complexType mixed="true"/>
+        </xs:element>
+        <xs:element name="StatusMessage">
+            <xs:complexType mixed="true"/>
+         </xs:element>
+</xs:schema>
