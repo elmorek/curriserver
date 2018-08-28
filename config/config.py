@@ -1,6 +1,9 @@
 import logging
+import os
 
-
+# TODO Create proper logging.
+# TODO Create proper testing.
+# TODO Create folder structure
 def logger(default_level='INFO', file='logs.log'):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
@@ -10,3 +13,5 @@ def logger(default_level='INFO', file='logs.log'):
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     return logger
+
+SCHEMAS_FOLDER = '{}\\schema\\'.format(os.getcwd())
