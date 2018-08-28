@@ -1,32 +1,35 @@
-from schema.schema import validate
+from xml.etree import ElementTree as ET
+from io import BytesIO
 from messageprocess.request import todict
-import xml.etree.ElementTree as ET
 from config.config import logger
 import falcon
 
-class CURRIServer():
+class RouteRequest():
 
     def __init__(self):
-        self.log = logger('INFO', 'logs.log')
-
-    def on_post(self, req, resp):
-        headers = req.headers
-        assert isinstance(req.headers, dict)
-        reqheaders = {
+        # TODO Fix logging
+        self.log = logger('DEBUG', 'logs.log')
+        self.reqheaders = {
             'User-Agent' : 'CiscoUCM-HttpClient/1.0',
             'methodName' : 'isRoleAccessAllowed',
         }
-        for key in headers in reqheaders.keys():
-            if headers[key] != reqheaders[key]:
-                resp.status = falcon.HTTP_400
-                resp.body = 'Invalid headers'
-                self.log.error('Invalid header {}. Expected value: {}'.format(key, reqheaders[key]))
 
-        if req.body:
-            assert isinstance(req.body, str)
-            request = ET.fromstring(req.body)
-            if not validate(req.body, 'request'):
+    def on_post(self, req, resp):
+        for header, value in self.reqheaders.items():
+            if self.reqheaders[header] != req.get_header(name=header, required=True):
+                self.log.error('Bad Request, expected header {} with value {}. Got {}'.format(header, value, req.get_header(name=header)), exc_info=True)
                 resp.status = falcon.HTTP_400
-                resp.body = 'Request not valid'
-                self.log.error('Invalid request. Body must be compliant with CURRI XACML schema')
-            request = todict(request)
+                resp.body = 'Bad Request, expected header {} with value {}. Got {}'.format(header, value, req.get_header(name=header))
+
+        if resp.status is not falcon.HTTP_400:
+            data = req.bounded_stream.read().decode('utf-8')
+            if data is None:
+                resp.status = falcon.HTTP_400
+                self.log.error('Request does not include data')
+            else:
+                resp.content_type = falcon.MEDIA_XML
+                # TODO Add XML declaration with BytesIO
+                data = todict(data)
+
+api = application = falcon.API()
+api.add_route('/request', RouteRequest())
