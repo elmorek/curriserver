@@ -1,5 +1,7 @@
 import xmlschema
 import sys
+import os
+from config.config import SCHEMAS_FOLDER
 
 
 def validate(xmlfile=None, type='request'):
@@ -10,10 +12,7 @@ def validate(xmlfile=None, type='request'):
     if type not in ['request', 'response', 'cixml']:
         print('Invalid xml document type')
         sys.exit()
-    schema = xmlschema.XMLSchema('{}.xsd'.format(type))
-    if schema.is_valid(xmlfile):
-        try:
-            schema.validate(xmlfile)
-            return schema.is_valid(xmlfile)
-        except xmlschema.XMLSchemaValidationError as e:
-            raise e
+    else:
+        schema = xmlschema.XMLSchema('{}{}.xsd'.format(SCHEMAS_FOLDER, type))
+        return schema.is_valid(xmlfile)
+
