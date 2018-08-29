@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 def todict(xml=None):
     xml = ET.fromstring(xml)
     assert isinstance(xml, object)
-    response = {
+    request = {
         'roleid' : xml[0][0][0].text,
         'callingnumber' : xml[0][1][0].text,
         'callednumber' : xml[0][2][0].text,
@@ -13,4 +13,4 @@ def todict(xml=None):
         'actionid' : xml[2][0][0].text,
         'triggerpointtype' : xml[3][0][0].text,
     }
-    return response
+    return request
