@@ -2,6 +2,7 @@ from xml.etree import ElementTree as ET
 from io import BytesIO
 from messageprocess.request import todict
 from config.config import logger
+from policies.review import getpolicies
 import falcon
 
 class RouteRequest():
@@ -27,9 +28,12 @@ class RouteRequest():
                 resp.status = falcon.HTTP_400
                 self.log.error('Request does not include data')
             else:
-                resp.content_type = falcon.MEDIA_XML
+                #resp.content_type = falcon.MEDIA_JSON
                 # TODO Add XML declaration with BytesIO
                 data = todict(data)
+                policies = getpolicies(data)
+                print(policies)
+                resp.body = str(policies)
 
 api = application = falcon.API()
 api.add_route('/request', RouteRequest())
