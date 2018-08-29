@@ -15,3 +15,9 @@ def logger(default_level='INFO', file='logs.log'):
     return logger
 
 SCHEMAS_FOLDER = '{}\\schema\\'.format(os.getcwd())
+
+DATABASE_CONFIG = {
+    'host': 'localhost',
+    'port' : 27017,
+    'database' : 'curri',
+}
